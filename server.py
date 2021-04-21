@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_pymongo import PyMongo
+from helpers.MongoHelper import MongoHelper
 
 app = Flask(__name__)
 app.config['Mongo_URI'] = "mongodb+srv://dbUser:1234@cluster0.kihfc.mongodb.net/testDb?retryWrites=true&w=majority"
@@ -14,17 +15,28 @@ if __name__ == "__main__":
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    mongoHelper = MongoHelper()
+    movies = mongoHelper.getAll()
+    print("Movies In ")
+    print(movies)
+
+    return render_template("index.html", moviesData=movies)
 
 
 @app.route('/create', methods=["GET", "POST"])
 def create():
     if(request.method == 'GET'):
+  
         return render_template("create.html")
     else:
         movieName = request.form['movieName']
         genre = request.form['genre']
         director = request.form['director']
+
+        mongoHelper = MongoHelper()
+
+        movieObject = {"movie_name":movieName,"genre":genre,"director":director}
+        mongoHelper.insert(movieObject)
 
         return redirect(url_for('index'))
 
