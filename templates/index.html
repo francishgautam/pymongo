@@ -17,11 +17,10 @@
       integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
       crossorigin="anonymous"
     />
-    {{moviesData}}
-
     <title>TABLE</title>
   </head>
   <body>
+    <a href="{{url_for('create')}}" class="btn btn-primary">Create</a>
     <div class="container m-5">
       <table class="table">
         <thead>
@@ -35,30 +34,18 @@
           </tr>
         </thead>
         <tbody>
+          {% for movie in moviesData %}
           <tr>
-            <th scope="row">1</th>
-            <td>Inception</td>
-            <td>sci-fi</td>
-            <td>Chis Nolan</td>
+            <th scope="row">{{ movie.id }}</th>
+            <td>{{movie.movie_name}}</td>
+            <td>{{movie.genre}}</td>
+            <td>{{movie.director}}</td>
             <td><i class="fas fa-edit"></i></td>
-            <td><i class="fas fa-trash"></i></td>
+            <td>
+              <a href="/delete/{{movie._id}}"><i class="fas fa-trash"></i></a>
+            </td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Psycho</td>
-            <td>Thriller</td>
-            <td>Patti Smith</td>
-            <td><i class="fas fa-edit"></i></td>
-            <td><i class="fas fa-trash"></i></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Stri</td>
-            <td>Horror</td>
-            <td>D.K Singh</td>
-            <td><i class="fas fa-edit"></i></td>
-            <td><i class="fas fa-trash"></i></td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>

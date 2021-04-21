@@ -17,8 +17,6 @@ if __name__ == "__main__":
 def index():
     mongoHelper = MongoHelper()
     movies = mongoHelper.getAll()
-    print("Movies In ")
-    print(movies)
 
     return render_template("index.html", moviesData=movies)
 
@@ -39,6 +37,35 @@ def create():
         mongoHelper.insert(movieObject)
 
         return redirect(url_for('index'))
+
+@app.route('/delete/<id>')
+def delete(id):
+    mongoHelper = MongoHelper()
+
+    print(mongoHelper.delete(id))
+
+    return redirect(url_for('index'))
+
+@app.route('/edit/<id>', methods=["GET", "POST"])
+def edit(id):
+    if(request.method == 'GET'):
+        
+        mongoHelper = MongoHelper()
+        movieData = mongoHelper.get(id)
+
+        return render_template("edit.html",movie=movieData)
+    else:
+        movieName = request.form['movieName']
+        genre = request.form['genre']
+        director = request.form['director']
+
+        mongoHelper = MongoHelper()
+
+        movieObject = {"movie_name":movieName,"genre":genre,"director":director}
+        mongoHelper.insert(movieObject)
+
+        return redirect(url_for('index'))
+
 
 
 ######################################################################################
